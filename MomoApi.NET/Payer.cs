@@ -18,25 +18,6 @@ namespace MomoApi.NET
         public PartyIdType PartyIdType { get; }
         public string PartyId { get; }
         
-//        private const string MSISDN = "MSISDN";
-//        private const string EMAIL = "EMAIL";
-//        private const string PARTY_CODE = "PARTY";
-//
-//        private string MapPartyIdTypeToEnum(PartyIdType partyIdType)
-//        {
-//            switch (partyIdType)
-//            {
-//                case NET.PartyIdType.Email:
-//                    return EMAIL;
-//                case NET.PartyIdType.Msisdn:
-//                    return MSISDN;
-//                case NET.PartyIdType.PartyCode:
-//                    return PARTY_CODE;
-//                default:
-//                    throw new Exception();
-//            }
-//        }
-
         private void Validate(string partyId, PartyIdType partyIdType)
         {
             
@@ -53,6 +34,6 @@ namespace MomoApi.NET
         Email,
         
         [EnumMember(Value = "PARTY_CODE")]
-        PartyCode
+        Party_Code
     }
 }
