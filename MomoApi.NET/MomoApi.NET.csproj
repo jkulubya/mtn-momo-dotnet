@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>7.2</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="flurl.http" Version="2.4.1" />
+      <PackageReference Include="newtonsoft.json" Version="12.0.1" />
+    </ItemGroup>
+
+</Project>

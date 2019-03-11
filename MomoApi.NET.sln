@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MomoApi.NET", "MomoApi.NET\MomoApi.NET.csproj", "{0D984DE1-3C8F-4841-B136-C6C6C37802EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{9F244912-C2E9-4098-A652-BFD31114C749}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D984DE1-3C8F-4841-B136-C6C6C37802EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D984DE1-3C8F-4841-B136-C6C6C37802EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D984DE1-3C8F-4841-B136-C6C6C37802EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D984DE1-3C8F-4841-B136-C6C6C37802EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F244912-C2E9-4098-A652-BFD31114C749}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F244912-C2E9-4098-A652-BFD31114C749}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F244912-C2E9-4098-A652-BFD31114C749}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F244912-C2E9-4098-A652-BFD31114C749}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
