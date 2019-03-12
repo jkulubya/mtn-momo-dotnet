@@ -1,6 +1,8 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Flurl.Http;
+using MomoApi.NET.ApiResponses;
 
 namespace MomoApi.NET
 {
@@ -16,24 +18,62 @@ namespace MomoApi.NET
             _subscriptionKey = key;
         }
         
-        public async Task<string> Transfer()
+        public async Task<Guid> Transfer(
+            decimal amount,
+            string currency,
+            string externalId,
+            Party recipient,
+            string payerMessage,
+            string payeeNote,
+            Uri callbackUrl)
         {
-            throw new NotImplementedException();
+            var referenceId = Guid.NewGuid();
+            var transaction = new
+            {
+                Amount = amount.ToString(CultureInfo.InvariantCulture),
+                Currency = currency,
+                ExternalId = externalId,
+                Payee = recipient,
+                PayerMessage = payerMessage,
+                PayeeNote = payeeNote,
+                CallbackUrl = callbackUrl.ToString()
+            };
+
+            await Client.Request("/disbursement/v1_0/transfer")
+                .WithHeader("X-Callback-Url", callbackUrl)
+                .WithHeader("X-Reference-Id", referenceId)
+                .PostJsonAsync(transaction);
+
+            return referenceId;
         }
 
-        public async Task<string> GetTransaction()
+        public async Task<Disbursement> GetTransaction(Guid referenceId)
         {
-            throw new NotImplementedException();
+            return await Client.Request($"/disbursement/v1_0/transfer/{referenceId}")
+                .GetJsonAsync<Disbursement>();
         }
 
-        public async Task<string> GetBalance()
+        public async Task<AccountBalance> GetBalance()
         {
-            throw new NotImplementedException();
+            var response = await Client
+                .Request("/disbursement/v1_0/account/balance")
+                .GetJsonAsync<AccountBalanceResponse>();
+
+            return new AccountBalance
+            {
+                AvailableBalance = decimal.Parse(response.AvailableBalance),
+                Currency = response.Currency
+            };
         }
 
-        public async Task<string> IsPayerActive()
+        public async Task<bool> IsPayerActive(Party party)
         {
-            throw new NotImplementedException();
+            var response = await Client
+                .Request(
+                    $"/disbursement/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
+                .GetJsonAsync<PayerActiveResponse>();
+            
+            return response.Result;
         }
     }
 }
