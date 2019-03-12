@@ -24,7 +24,7 @@ namespace MomoApi.NET
             decimal amount,
             string currency,
             string externalId,
-            Payer payer,
+            Party payer,
             string payerMessage,
             string payeeNote,
             Uri callbackUrl
@@ -45,16 +45,17 @@ namespace MomoApi.NET
             };
 
             await Client.Request("/collection/v1_0/requesttopay")
-                    .WithHeader("X-Reference-Id", referenceId)
-                    .PostJsonAsync(transaction);
+                .WithHeader("X-Callback-Url", callbackUrl)
+                .WithHeader("X-Reference-Id", referenceId)
+                .PostJsonAsync(transaction);
 
             return referenceId;
         }
 
-        public async Task<Transaction> GetTransaction(Guid referenceId)
+        public async Task<Collection> GetTransaction(Guid referenceId)
         {
             return await Client.Request($"/collection/v1_0/requesttopay/{referenceId}")
-                .GetJsonAsync<Transaction>();
+                .GetJsonAsync<Collection>();
         }
 
         public async Task<AccountBalance> GetBalance()
@@ -70,11 +71,11 @@ namespace MomoApi.NET
             };
         }
 
-        public async Task<bool> IsPayerActive(Payer payer)
+        public async Task<bool> IsAccountHolderActive(Party party)
         {
             var response = await Client
                 .Request(
-                    $"/collection/v1_0/accountholder/{payer.PartyIdType.ToString().ToLowerInvariant()}/{payer.PartyId}/active")
+                    $"/collection/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
                 .GetJsonAsync<PayerActiveResponse>();
             
             return response.Result;

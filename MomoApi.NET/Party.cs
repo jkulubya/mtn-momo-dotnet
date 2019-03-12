@@ -5,10 +5,10 @@ using Newtonsoft.Json.Converters;
 
 namespace MomoApi.NET
 {
-    public class Payer
+    public class Party
     {
         
-        public Payer(string partyId, PartyIdType partyIdType)
+        public Party(string partyId, PartyIdType partyIdType)
         {
             Validate(partyId, partyIdType);
             PartyId = partyId;
