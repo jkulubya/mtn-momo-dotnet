@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Flurl.Http;
+using MomoApi.NET.ApiResponses;
 
 namespace MomoApi.NET
 {
@@ -45,9 +46,7 @@ namespace MomoApi.NET
 
             await Client.Request("/collection/v1_0/requesttopay")
                     .WithHeader("X-Reference-Id", referenceId)
-                    .PostJsonAsync(transaction)
-                // todo get some  kinda response here
-                ;
+                    .PostJsonAsync(transaction);
 
             return referenceId;
         }
@@ -58,20 +57,27 @@ namespace MomoApi.NET
                 .GetJsonAsync<Transaction>();
         }
 
-        public async Task<Balance> GetBalance()
+        public async Task<AccountBalance> GetBalance()
         {
-            return await Client
-                .Request("/v1_0/account/balance")
-                .GetJsonAsync<Balance>();
+            var response = await Client
+                .Request("/collection/v1_0/account/balance")
+                .GetJsonAsync<AccountBalanceResponse>();
+
+            return new AccountBalance
+            {
+                AvailableBalance = decimal.Parse(response.AvailableBalance),
+                Currency = response.Currency
+            };
         }
 
-        public async Task<string> IsPayerActive(Payer payer)
+        public async Task<bool> IsPayerActive(Payer payer)
         {
-            return await Client
-                .Request($"/collection/v1_0/accountholder/{payer.PartyIdType}/{payer.PartyId}/active")
-                .GetStringAsync();
+            var response = await Client
+                .Request(
+                    $"/collection/v1_0/accountholder/{payer.PartyIdType.ToString().ToLowerInvariant()}/{payer.PartyId}/active")
+                .GetJsonAsync<PayerActiveResponse>();
+            
+            return response.Result;
         }
-
-        
     }
 }
