@@ -1,10 +1,13 @@
+using System;
 using MomoApi.NET.Exceptions;
+using Newtonsoft.Json;
 
 namespace MomoApi.NET
 {
     public class Disbursement
     {
-        public string Amount { get; set; }
+        [JsonConverter(typeof(StringDecimalConverter))]
+        public decimal Amount { get; set; }
         public string Currency { get; set; }
         public string FinancialTransactionId { get; set; }
         public string ExternalId { get; set; }
