@@ -63,18 +63,24 @@ namespace MomoApi.NET
         private async Task ThrowMomoErrorInstead(HttpCall httpCall)
         {
             var exception = httpCall.Exception;
+            
+            if(exception is FlurlParsingException parsingException)
+                throw new NetworkException(parsingException);
 
-            if (exception is FlurlHttpException e)
+            if (exception is FlurlHttpTimeoutException timeoutException)
+                throw new NetworkException(timeoutException);
+            
+            if (exception is FlurlHttpException httpException)
             {
                 ErrorResponse response;
 
                 try
                 {
-                    response = await e.GetResponseJsonAsync<ErrorResponse>();
+                    response = await httpException.GetResponseJsonAsync<ErrorResponse>();
                 }
-                catch (Exception e1)
+                catch(Exception e)
                 {
-                    throw new NetworkException(e1);
+                    throw new NetworkException(e);
                 }
                 
                 throw new MomoException(response.Code, response.Message);
