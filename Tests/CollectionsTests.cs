@@ -141,7 +141,17 @@ namespace Tests
                     .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey)
                     .WithRequestJson(new
                     {
-                        
+                        amount = "25000.00",
+                        currency = "UGX",
+                        externalId = "XX",
+                        payer = new
+                        {
+                            partyIdType = "MSISDN",
+                            partyId = "0777000000"
+                        },
+                        payerMessage = "YY",
+                        payeeNote = "ZZ",
+                        callbackUrl = "http://www.example.com/"
                     });
             }
         }
@@ -185,7 +195,7 @@ namespace Tests
                 
                 httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath));
                 httpTest.ShouldHaveCalled(
-                        BaseUri.AppendPathSegment("/collection/v1_0/requesttopay"))
+                        BaseUri.AppendPathSegment("/collection/v1_0/requesttopay").AppendPathSegment(guid))
                     .WithHeader("Authorization", $"Bearer {AccessToken}")
                     .WithHeader("X-Target-Environment", "sandbox")
                     .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey);

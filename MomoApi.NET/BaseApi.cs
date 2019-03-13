@@ -2,8 +2,11 @@ using System;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
+using Flurl.Http.Configuration;
 using MomoApi.NET.ApiResponses;
 using MomoApi.NET.Exceptions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace MomoApi.NET
 {
@@ -24,6 +27,10 @@ namespace MomoApi.NET
             {
                 settings.BeforeCallAsync = BeforeCallAsync;
                 settings.OnErrorAsync = ThrowMomoErrorInstead;
+                settings.JsonSerializer = new NewtonsoftJsonSerializer(new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
             });
         }
         
@@ -48,7 +55,7 @@ namespace MomoApi.NET
             httpCall.Request.Headers
                 .Add("Ocp-Apim-Subscription-Key", _subscriptionKey);
                         
-            if (Token == null || Token.Expires > DateTimeOffset.Now)
+            if (Token == null || DateTimeOffset.UtcNow >= Token.Expires)
             {
                 var newToken = await RefreshAccessToken();
                 Token = newToken;
