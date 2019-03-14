@@ -47,7 +47,7 @@ namespace MomoApi.NET
             return referenceId;
         }
 
-        public async Task<Disbursement> GetTransaction(Guid referenceId)
+        public async Task<Disbursement> GetDisbursement(Guid referenceId)
         {
             return await Client.Request($"/disbursement/v1_0/transfer/{referenceId}")
                 .GetJsonAsync<Disbursement>();
@@ -66,7 +66,7 @@ namespace MomoApi.NET
             };
         }
 
-        public async Task<bool> IsPayerActive(Party party)
+        public async Task<bool> IsAccountHolderActive(Party party)
         {
             var response = await Client
                 .Request(
