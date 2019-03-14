@@ -7,6 +7,8 @@
     api_key:
       secure: CpF9TZBNflf9r3wgzUkVlblYMoqlRWX7pLLMxZjmtOTqPnAxRN3mbLRVL6hNIrLZ
     skip_symbols: false
+    symbol_server:  # fix up when appveyor get nuget symbol support
+    artifact: /.*\.nupkg/
 -
   version: 1.0.0-alpha-{build}
   image:
