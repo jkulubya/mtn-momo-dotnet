@@ -2,7 +2,7 @@ using System.Runtime.Serialization;
 
 namespace MtnMomo.NET
 {
-    public enum Status
+    public enum TransactionStatus
     {
         [EnumMember(Value = "PENDING")]
         Pending,

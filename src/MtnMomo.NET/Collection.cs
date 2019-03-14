@@ -11,7 +11,7 @@ namespace MtnMomo.NET
         public string FinancialTransactionId { get; set; }
         public string ExternalId { get; set; }
         public Party Payer { get; set; }
-        public Status Status { get; set; }
+        public TransactionStatus Status { get; set; }
         public ErrorCode Reason { get; set; }
     }
 }
