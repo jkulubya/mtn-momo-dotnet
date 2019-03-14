@@ -1,0 +1,27 @@
+-
+  branches:
+    only:
+      - master
+  deploy:
+    provider: NuGet
+    api_key:
+      secure: CpF9TZBNflf9r3wgzUkVlblYMoqlRWX7pLLMxZjmtOTqPnAxRN3mbLRVL6hNIrLZ
+    skip_symbols: false
+-
+  version: 1.0.0-alpha-{build}
+  image:
+    - Visual Studio 2017
+
+  nuget:
+    disable_publish_on_pr: true
+
+  build_script:
+    - cmd: dotnet pack -c Release --output output
+
+  test_script:
+    - cmd: dotnet test
+
+  artifacts:
+    - path: 'output\**\*.nupkg'
+    - path: 'output\**\*.snupkg'
+
