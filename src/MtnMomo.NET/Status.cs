@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
     public enum Status
     {

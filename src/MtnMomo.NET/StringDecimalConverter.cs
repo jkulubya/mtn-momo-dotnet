@@ -3,7 +3,7 @@ using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
     public class StringDecimalConverter : JsonConverter
     {

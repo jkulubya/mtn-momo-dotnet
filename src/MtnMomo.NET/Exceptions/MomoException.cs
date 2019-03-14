@@ -1,6 +1,6 @@
 using System;
 
-namespace MomoApi.NET.Exceptions
+namespace MtnMomo.NET.Exceptions
 {
     public class MomoException : Exception
     {

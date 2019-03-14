@@ -1,6 +1,6 @@
 using Flurl.Http;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
     public class HttpClientFactory
     {

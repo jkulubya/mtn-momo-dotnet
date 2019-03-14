@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
 using Flurl.Http.Configuration;
-using MomoApi.NET.ApiResponses;
-using MomoApi.NET.Exceptions;
+using MtnMomo.NET.ApiResponses;
+using MtnMomo.NET.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
     public abstract class BaseApi
     {

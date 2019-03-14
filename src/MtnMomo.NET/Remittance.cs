@@ -1,8 +1,7 @@
-using System;
-using MomoApi.NET.Exceptions;
+using MtnMomo.NET.Exceptions;
 using Newtonsoft.Json;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
     public class Remittance
     {

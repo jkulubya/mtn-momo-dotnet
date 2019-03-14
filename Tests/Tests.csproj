@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MomoApi.NET\MomoApi.NET.csproj" />
+      <ProjectReference Include="..\src\MtnMomo.NET\MtnMomo.NET.csproj" />
     </ItemGroup>
 
 </Project>

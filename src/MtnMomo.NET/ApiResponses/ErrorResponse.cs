@@ -1,6 +1,6 @@
-using MomoApi.NET.Exceptions;
+using MtnMomo.NET.Exceptions;
 
-namespace MomoApi.NET.ApiResponses
+namespace MtnMomo.NET.ApiResponses
 {
     public class ErrorResponse
     {

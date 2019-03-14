@@ -1,6 +1,6 @@
 using System;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
     internal class AccessToken
     {

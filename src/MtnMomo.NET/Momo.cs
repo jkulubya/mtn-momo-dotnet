@@ -1,7 +1,4 @@
-﻿using System;
-using Flurl.Http;
-
-namespace MomoApi.NET
+﻿namespace MtnMomo.NET
 {
     public class Momo
     {

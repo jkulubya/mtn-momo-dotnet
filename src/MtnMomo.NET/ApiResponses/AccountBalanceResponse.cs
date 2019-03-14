@@ -1,4 +1,4 @@
-namespace MomoApi.NET.ApiResponses
+namespace MtnMomo.NET.ApiResponses
 {
     internal class AccountBalanceResponse
     {

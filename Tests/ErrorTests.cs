@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Flurl.Http.Testing;
-using MomoApi.NET;
-using MomoApi.NET.Exceptions;
+using MtnMomo.NET;
+using MtnMomo.NET.Exceptions;
 using Xunit;
 
 namespace Tests

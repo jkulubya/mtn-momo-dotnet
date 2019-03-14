@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http.Testing;
-using MomoApi.NET;
+using MtnMomo.NET;
 using Xunit;
 
 namespace Tests

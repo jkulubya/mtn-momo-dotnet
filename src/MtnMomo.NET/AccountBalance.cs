@@ -1,4 +1,4 @@
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
     public class AccountBalance
     {

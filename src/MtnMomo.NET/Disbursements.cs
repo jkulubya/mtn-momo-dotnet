@@ -1,50 +1,45 @@
 using System;
 using System.Globalization;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Flurl.Http;
-using MomoApi.NET.ApiResponses;
+using MtnMomo.NET.ApiResponses;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
-    public class Collections : BaseApi
+    public class Disbursements : BaseApi
     {
-        protected override string _tokenPath { get; } = "/collection/token/";
+        protected override string _tokenPath { get; } = "/disbursement/token/";
         protected override string _subscriptionKey { get; }
 
-        internal Collections(HttpClientFactory clientFactory, MomoConfig config) : base(clientFactory, config)
+        internal Disbursements(HttpClientFactory clientFactory, MomoConfig config) : base(clientFactory, config)
         {
-            var key = config?.SubscriptionKeys?.Collections;
-            if(string.IsNullOrWhiteSpace(key)) throw new ArgumentException("The collections subscription key cannot be null");
+            var key = config?.SubscriptionKeys?.Disbursements;
+            if(string.IsNullOrWhiteSpace(key)) throw new ArgumentException("The disbursements subscription key cannot be null");
             _subscriptionKey = key;
         }
         
-        public async Task<Guid> RequestToPay(
+        public async Task<Guid> Transfer(
             decimal amount,
             string currency,
             string externalId,
-            Party payer,
+            Party recipient,
             string payerMessage,
             string payeeNote,
-            Uri callbackUrl
-            )
+            Uri callbackUrl)
         {
-            
-            // TODO validate inputs
             var referenceId = Guid.NewGuid();
             var transaction = new
             {
                 Amount = amount.ToString(CultureInfo.InvariantCulture),
                 Currency = currency,
                 ExternalId = externalId,
-                Payer = payer,
+                Payee = recipient,
                 PayerMessage = payerMessage,
                 PayeeNote = payeeNote,
                 CallbackUrl = callbackUrl.ToString()
             };
 
-            await Client.Request("/collection/v1_0/requesttopay")
+            await Client.Request("/disbursement/v1_0/transfer")
                 .WithHeader("X-Callback-Url", callbackUrl)
                 .WithHeader("X-Reference-Id", referenceId)
                 .PostJsonAsync(transaction);
@@ -52,16 +47,16 @@ namespace MomoApi.NET
             return referenceId;
         }
 
-        public async Task<Collection> GetTransaction(Guid referenceId)
+        public async Task<Disbursement> GetDisbursement(Guid referenceId)
         {
-            return await Client.Request($"/collection/v1_0/requesttopay/{referenceId}")
-                .GetJsonAsync<Collection>();
+            return await Client.Request($"/disbursement/v1_0/transfer/{referenceId}")
+                .GetJsonAsync<Disbursement>();
         }
 
         public async Task<AccountBalance> GetBalance()
         {
             var response = await Client
-                .Request("/collection/v1_0/account/balance")
+                .Request("/disbursement/v1_0/account/balance")
                 .GetJsonAsync<AccountBalanceResponse>();
 
             return new AccountBalance
@@ -75,7 +70,7 @@ namespace MomoApi.NET
         {
             var response = await Client
                 .Request(
-                    $"/collection/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
+                    $"/disbursement/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
                 .GetJsonAsync<PayerActiveResponse>();
             
             return response.Result;
