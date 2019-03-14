@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http.Testing;
@@ -52,8 +53,10 @@ namespace Tests
 
                 var result = await collections.GetBalance();
 
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath));
+                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath))
+                    .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment("/collection/v1_0/account/balance"))
+                    .WithVerb(HttpMethod.Get)
                     .WithHeader("Authorization", $"Bearer {AccessToken}")
                     .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey)
                     .WithHeader("X-Target-Environment", "sandbox");
@@ -86,9 +89,11 @@ namespace Tests
 
                 var result = await collections.IsAccountHolderActive(new Party("0777000000", PartyIdType.Msisdn));
 
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath));
+                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath))
+                    .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         BaseUri.AppendPathSegment($"/collection/v1_0/accountholder/msisdn/0777000000/active"))
+                    .WithVerb(HttpMethod.Get)
                     .WithHeader("Authorization", $"Bearer {AccessToken}")
                     .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey)
                     .WithHeader("X-Target-Environment", "sandbox");
@@ -132,9 +137,11 @@ namespace Tests
                     new Uri("http://www.example.com")
                 );
 
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath));
+                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath))
+                    .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         BaseUri.AppendPathSegment("/collection/v1_0/requesttopay"))
+                    .WithVerb(HttpMethod.Post)
                     .WithHeader("Authorization", $"Bearer {AccessToken}")
                     .WithHeader("X-Reference-Id", result.ToString())
                     .WithHeader("X-Target-Environment", "sandbox")
@@ -193,9 +200,11 @@ namespace Tests
                 
                 var result = await collections.GetTransaction(guid);
                 
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath));
+                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath))
+                    .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         BaseUri.AppendPathSegment("/collection/v1_0/requesttopay").AppendPathSegment(guid))
+                    .WithVerb(HttpMethod.Get)
                     .WithHeader("Authorization", $"Bearer {AccessToken}")
                     .WithHeader("X-Target-Environment", "sandbox")
                     .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey);
