@@ -3,6 +3,18 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>7.2</LangVersion>
+        <PackageId>MtnMomo.NET</PackageId>
+        <Version>0.0.1</Version>
+        <Authors>jkulubya</Authors>
+        <Title>Mtn Momo API Library</Title>
+        <PackageProjectUrl>https://github.com/jkulubya/mtn-momo-dotnet</PackageProjectUrl>            
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/jkulubya/mtn-momo-dotnet</RepositoryUrl>
+        <PackageTags>Mobile Money;Momo;MTN</PackageTags>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
     <ItemGroup>
