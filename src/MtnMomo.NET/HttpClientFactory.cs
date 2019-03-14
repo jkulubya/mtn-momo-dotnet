@@ -1,17 +1,17 @@
 using Flurl.Http;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
-    public class HttpClientFactory
+    internal class HttpClientFactory
     {
         private readonly MomoConfig _config;
 
-        public HttpClientFactory(MomoConfig config)
+        internal HttpClientFactory(MomoConfig config)
         {
             _config = config;
         }
         
-        public FlurlClient GetClient()
+        internal FlurlClient GetClient()
         {
             return new FlurlClient(_config.BaseUri).WithHeaders(new
             {

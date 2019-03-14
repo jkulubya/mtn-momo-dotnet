@@ -1,11 +1,10 @@
 using System;
 using System.Globalization;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Flurl.Http;
+using MtnMomo.NET.ApiResponses;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
     public class Collections : BaseApi
     {
@@ -23,7 +22,7 @@ namespace MomoApi.NET
             decimal amount,
             string currency,
             string externalId,
-            Payer payer,
+            Party payer,
             string payerMessage,
             string payeeNote,
             Uri callbackUrl
@@ -44,34 +43,40 @@ namespace MomoApi.NET
             };
 
             await Client.Request("/collection/v1_0/requesttopay")
-                    .WithHeader("X-Reference-Id", referenceId)
-                    .PostJsonAsync(transaction)
-                // todo get some  kinda response here
-                ;
+                .WithHeader("X-Callback-Url", callbackUrl)
+                .WithHeader("X-Reference-Id", referenceId)
+                .PostJsonAsync(transaction);
 
             return referenceId;
         }
 
-        public async Task<Transaction> GetTransaction(Guid referenceId)
+        public async Task<Collection> GetTransaction(Guid referenceId)
         {
             return await Client.Request($"/collection/v1_0/requesttopay/{referenceId}")
-                .GetJsonAsync<Transaction>();
+                .GetJsonAsync<Collection>();
         }
 
-        public async Task<Balance> GetBalance()
+        public async Task<AccountBalance> GetBalance()
         {
-            return await Client
-                .Request("/v1_0/account/balance")
-                .GetJsonAsync<Balance>();
+            var response = await Client
+                .Request("/collection/v1_0/account/balance")
+                .GetJsonAsync<AccountBalanceResponse>();
+
+            return new AccountBalance
+            {
+                AvailableBalance = decimal.Parse(response.AvailableBalance),
+                Currency = response.Currency
+            };
         }
 
-        public async Task<string> IsPayerActive(Payer payer)
+        public async Task<bool> IsAccountHolderActive(Party party)
         {
-            return await Client
-                .Request($"/collection/v1_0/accountholder/{payer.PartyIdType}/{payer.PartyId}/active")
-                .GetStringAsync();
+            var response = await Client
+                .Request(
+                    $"/collection/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
+                .GetJsonAsync<PayerActiveResponse>();
+            
+            return response.Result;
         }
-
-        
     }
 }

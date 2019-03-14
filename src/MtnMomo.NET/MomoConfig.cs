@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
     public class MomoConfig
     {

@@ -1,7 +1,10 @@
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET.Exceptions
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ErrorCode
     {
         [EnumMember(Value = "PAYEE_NOT_FOUND")]

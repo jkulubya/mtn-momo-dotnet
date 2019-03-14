@@ -1,20 +1,19 @@
-﻿using System;
-using Flurl.Http;
-
-namespace MomoApi.NET
+﻿namespace MtnMomo.NET
 {
     public class Momo
     {
-        private readonly MomoConfig _config = new MomoConfig();
+        private readonly MomoConfig _config;
         private readonly HttpClientFactory _clientFactory;
         public Momo()
         {
+            _config = new MomoConfig();
             _clientFactory = new HttpClientFactory(_config);
         }
         
-        public Momo(MomoConfig config): this()
+        public Momo(MomoConfig config)
         {
             _config = config;
+            _clientFactory = new HttpClientFactory(_config);
         }
 
         public Collections Collections => new Collections(_clientFactory, _config);

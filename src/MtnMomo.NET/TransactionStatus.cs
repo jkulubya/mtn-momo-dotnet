@@ -1,8 +1,8 @@
 using System.Runtime.Serialization;
 
-namespace MomoApi.NET
+namespace MtnMomo.NET
 {
-    public enum Status
+    public enum TransactionStatus
     {
         [EnumMember(Value = "PENDING")]
         Pending,
