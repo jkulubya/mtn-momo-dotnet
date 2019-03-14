@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace MtnMomo.NET
+namespace MtnMomo.NET.ApiResponses
 {
     public class GetAccessTokenResponse
     {
