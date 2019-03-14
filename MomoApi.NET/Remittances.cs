@@ -47,7 +47,7 @@ namespace MomoApi.NET
             return referenceId;
         }
 
-        public async Task<Remittance> GetTransfer(Guid referenceId)
+        public async Task<Remittance> GetRemittance(Guid referenceId)
         {
             return await Client.Request($"/remittance/v1_0/transfer/{referenceId}")
                 .GetJsonAsync<Remittance>();
