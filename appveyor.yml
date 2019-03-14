@@ -2,6 +2,34 @@
   branches:
     only:
       - master
+  
+  version: 1.0.0-alpha-{build}
+
+  image:
+    - Visual Studio 2017
+
+  nuget:
+    disable_publish_on_pr: true
+
+  build_script:
+    - cmd: dotnet pack -c Release --output output
+
+  test_script:
+    - cmd: dotnet test
+
+  artifacts:
+    - path: 'src\MtnMomo.NET\output\**\*.nupkg'
+    - path: 'src\MtnMomo.NET\output\**\*.snupkg'
+
+  dotnet_csproj:
+    patch: true
+    file: '**\*.csproj'
+    version: '{version}'
+    package_version: '{version}'
+    assembly_version: '{version}'
+    file_version: '{version}'
+    informational_version: '{version}'
+
   deploy:
     provider: NuGet
     api_key:
