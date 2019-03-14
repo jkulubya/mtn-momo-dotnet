@@ -2,7 +2,7 @@ using MtnMomo.NET.Exceptions;
 
 namespace MtnMomo.NET.ApiResponses
 {
-    public class ErrorResponse
+    internal class ErrorResponse
     {
         public string Message { get; set; }
         

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace MtnMomo.NET.ApiResponses
 {
-    public class GetAccessTokenResponse
+    internal class GetAccessTokenResponse
     {
         [JsonProperty(PropertyName = "access_token")]
         public string AccessToken { get; set; }

@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MtnMomo.NET
 {
-    public class StringDecimalConverter : JsonConverter
+    internal class StringDecimalConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
