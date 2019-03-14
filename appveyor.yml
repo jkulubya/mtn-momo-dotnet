@@ -22,6 +22,15 @@
     - cmd: dotnet test
 
   artifacts:
-    - path: 'output\**\*.nupkg'
-    - path: 'output\**\*.snupkg'
+    - path: 'src\MtnMomo.NET\output\**\*.nupkg'
+    - path: 'src\MtnMomo.NET\output\**\*.snupkg'
+
+  dotnet_csproj:
+    patch: true
+    file: '**\*.csproj'
+    version: '{version}'
+    package_version: '{version}'
+    assembly_version: '{version}'
+    file_version: '{version}'
+    informational_version: '{version}'
 
