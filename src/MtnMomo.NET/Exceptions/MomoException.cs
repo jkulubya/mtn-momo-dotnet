@@ -4,13 +4,11 @@ namespace MtnMomo.NET.Exceptions
 {
     public class MomoException : Exception
     {
-        public MomoException(ErrorCode errorCode, string message)
+        public MomoException(ErrorCode errorCode, string message) : base(message)
         {
             ErrorCode = errorCode;
-            Message = message;
         }
         
         public ErrorCode ErrorCode { get; }
-        public string Message { get; }
     }
 }
