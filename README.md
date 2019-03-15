@@ -3,7 +3,7 @@
 
 Use the [MTN Mobile Money API](https://momodeveloper.mtn.com) in your .NET applications.
 
-Currently targeting netstandard2.0.
+Currently targeting netstandard1.3.
 
 ## Installation
 Find the package on [NuGet](https://www.nuget.org/packages?q=mtnmomo.net)
