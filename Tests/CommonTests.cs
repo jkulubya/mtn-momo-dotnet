@@ -3,15 +3,14 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http.Testing;
 using MtnMomo.NET;
+using Tests.Base;
 using Xunit;
 
 namespace Tests
 {
-    public class CommonTests : BaseTestClass
+    public class CommonTests : BaseTests
     {
-        private const string SubscriptionKey = "d484a1f0d34f4301916d0f2c9e9106a2";
-        private const string TokenPath = "/collection/token/";
-        
+       
         [Fact]
         public async Task MakingMultipleRequestsDoesNotRequestNewToken()
         {
@@ -20,7 +19,7 @@ namespace Tests
                 httpTest
                     .RespondWithJson(new
                     {
-                        access_token = AccessToken,
+                        access_token = Settings.AccessToken,
                         expires_in = 3600,
                         token_type = "access_token"
                     })
@@ -48,10 +47,12 @@ namespace Tests
                             partyId = "0777000000"
                         }
                     });
-                var config = new MomoConfig();
-                config.UserId = UserId;
-                config.UserSecret = UserSecretKey;
-                config.SubscriptionKeys.Collections = SubscriptionKey;
+                var config = new MomoConfig
+                {
+                    UserId = Settings.UserId,
+                    UserSecret = Settings.UserSecretKey,
+                    SubscriptionKeys = {Collections = Settings.SubscriptionKey }
+                };
 
                 var momo = new Momo(config);
                 var collections = momo.Collections;
@@ -62,14 +63,14 @@ namespace Tests
                 var result1 = await collections.GetTransaction(guid1);
                 var result2 = await collections.GetTransaction(guid2);
                 
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath));
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment("/collection/v1_0/requesttopay").AppendPathSegment(guid1))
-                    .WithHeader("Authorization", $"Bearer {AccessToken}")
-                    .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey)
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath));
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment("/collection/v1_0/requesttopay").AppendPathSegment(guid1))
+                    .WithHeader("Authorization", $"Bearer {Settings.AccessToken}")
+                    .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey)
                     .WithHeader("X-Target-Environment", "sandbox");         
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment("/collection/v1_0/requesttopay").AppendPathSegment(guid2))
-                    .WithHeader("Authorization", $"Bearer {AccessToken}")
-                    .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey)
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment("/collection/v1_0/requesttopay").AppendPathSegment(guid2))
+                    .WithHeader("Authorization", $"Bearer {Settings.AccessToken}")
+                    .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey)
                     .WithHeader("X-Target-Environment", "sandbox");
                 
                 Assert.Equal(20000, result1.Amount);
