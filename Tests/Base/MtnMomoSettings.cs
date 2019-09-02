@@ -7,6 +7,5 @@ namespace Tests.Base
         public string UserId { get; set; }
         public string UserSecretKey { get; set; }
         public string AccessToken { get; set; }                        
-        public string TokenPath { get; set; }                        
     }
 }

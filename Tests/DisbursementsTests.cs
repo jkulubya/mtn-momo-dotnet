@@ -11,6 +11,7 @@ namespace Tests
 {
     public class DisbursementsTests : BaseTests
     {
+        private const string TokenPath = "/disbursement/token/";
         [Fact]
         public void ThrowsOnInvalidConfig()
         {
@@ -53,7 +54,7 @@ namespace Tests
 
                 var result = await disbursements.GetBalance();
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment("/disbursement/v1_0/account/balance"))
                     .WithVerb(HttpMethod.Get)
@@ -71,8 +72,7 @@ namespace Tests
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest
-                    .RespondWithJson(new
+                httpTest.RespondWithJson(new
                     {
                         access_token = Settings.AccessToken,
                         expires_in = 3600,
@@ -93,7 +93,7 @@ namespace Tests
 
                 var result = await disbursements.IsAccountHolderActive(new Party("0777000000", PartyIdType.Msisdn));
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
 
                 httpTest.ShouldHaveCalled(
@@ -144,7 +144,7 @@ namespace Tests
                     new Uri("http://www.example.com")
                 );
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         Settings.BaseUri.AppendPathSegment("/disbursement/v1_0/transfer"))
@@ -209,7 +209,7 @@ namespace Tests
                 
                 var result = await disbursements.GetDisbursement(guid);
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         Settings.BaseUri.AppendPathSegment("/disbursement/v1_0/transfer").AppendPathSegment(guid))

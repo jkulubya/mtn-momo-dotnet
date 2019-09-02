@@ -8,14 +8,14 @@ namespace MtnMomo.NET
 {
     public class Collections : BaseApi
     {
-        protected override string _tokenPath { get; } = "/collection/token/";
-        protected override string _subscriptionKey { get; }
+        protected override string TokenPath { get; } = "/collection/token/";
+        protected override string SubscriptionKey { get; }
 
         internal Collections(HttpClientFactory clientFactory, MomoConfig config) : base(clientFactory, config)
         {
             var key = config?.SubscriptionKeys?.Collections;
             if(string.IsNullOrWhiteSpace(key)) throw new ArgumentException("The collections subscription key cannot be null");
-            _subscriptionKey = key;
+            SubscriptionKey = key;
         }
         
         public async Task<Guid> RequestToPay(

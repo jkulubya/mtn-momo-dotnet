@@ -11,6 +11,7 @@ namespace Tests
 {
     public class CollectionsTests : BaseTests
     {
+        private const string TokenPath = "/collection/token/";
         [Fact]
         public void ThrowsOnInvalidConfig()
         {
@@ -53,7 +54,7 @@ namespace Tests
 
                 var result = await collections.GetBalance();
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment("/collection/v1_0/account/balance"))
                     .WithVerb(HttpMethod.Get)
@@ -91,7 +92,7 @@ namespace Tests
 
                 var result = await collections.IsAccountHolderActive(new Party("0777000000", PartyIdType.Msisdn));
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         Settings.BaseUri.AppendPathSegment($"/collection/v1_0/accountholder/msisdn/0777000000/active"))
@@ -139,7 +140,7 @@ namespace Tests
                     new Uri("http://www.example.com")
                 );
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         Settings.BaseUri.AppendPathSegment("/collection/v1_0/requesttopay"))
@@ -204,7 +205,7 @@ namespace Tests
                 
                 var result = await collections.GetTransaction(guid);
                 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         Settings.BaseUri.AppendPathSegment("/collection/v1_0/requesttopay").AppendPathSegment(guid))

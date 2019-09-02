@@ -10,7 +10,8 @@ namespace Tests
 {
     public class CommonTests : BaseTests
     {
-       
+        private const string TokenPath = "/collection/token/";
+
         [Fact]
         public async Task MakingMultipleRequestsDoesNotRequestNewToken()
         {
@@ -63,7 +64,7 @@ namespace Tests
                 var result1 = await collections.GetTransaction(guid1);
                 var result2 = await collections.GetTransaction(guid2);
                 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath));
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath));
                 httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment("/collection/v1_0/requesttopay").AppendPathSegment(guid1))
                     .WithHeader("Authorization", $"Bearer {Settings.AccessToken}")
                     .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey)

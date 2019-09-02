@@ -10,7 +10,9 @@ namespace Tests
 {
     public class ErrorTests : BaseTests
     {
-       
+        private const string TokenPath = "/collection/token/";
+
+
         [Fact]
         public async Task NetworkErrorIsThrownWhenInvalidResponseIsReceived()
         {

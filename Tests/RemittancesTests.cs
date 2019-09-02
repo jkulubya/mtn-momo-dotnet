@@ -11,6 +11,9 @@ namespace Tests
 {
     public class RemittancesTests : BaseTests
     {
+
+        private const string TokenPath = "/remittance/token/";
+
         [Fact]
         public void ThrowsOnInvalidConfig()
         {
@@ -53,7 +56,7 @@ namespace Tests
 
                 var result = await remittances.GetBalance();
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment("/remittance/v1_0/account/balance"))
                     .WithVerb(HttpMethod.Get)
@@ -91,7 +94,7 @@ namespace Tests
 
                 var result = await remittances.IsAccountHolderActive(new Party("0777000000", PartyIdType.Msisdn));
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         Settings.BaseUri.AppendPathSegment($"/remittance/v1_0/accountholder/msisdn/0777000000/active"))
@@ -139,7 +142,7 @@ namespace Tests
                     new Uri("http://www.example.com")
                 );
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         Settings.BaseUri.AppendPathSegment("/remittance/v1_0/transfer"))
@@ -204,7 +207,7 @@ namespace Tests
                 
                 var result = await remittances.GetRemittance(guid);
 
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(Settings.TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
                         Settings.BaseUri.AppendPathSegment("/remittance/v1_0/transfer").AppendPathSegment(guid))
