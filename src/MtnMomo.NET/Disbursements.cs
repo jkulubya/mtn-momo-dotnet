@@ -8,14 +8,14 @@ namespace MtnMomo.NET
 {
     public class Disbursements : BaseApi
     {
-        protected override string _tokenPath { get; } = "/disbursement/token/";
-        protected override string _subscriptionKey { get; }
+        protected override string TokenPath { get; } = "/disbursement/token/";
+        protected override string SubscriptionKey { get; }
 
         internal Disbursements(HttpClientFactory clientFactory, MomoConfig config) : base(clientFactory, config)
         {
             var key = config?.SubscriptionKeys?.Disbursements;
             if(string.IsNullOrWhiteSpace(key)) throw new ArgumentException("The disbursements subscription key cannot be null");
-            _subscriptionKey = key;
+            SubscriptionKey = key;
         }
         
         public async Task<Guid> Transfer(
