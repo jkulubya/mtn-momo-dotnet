@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http.Testing;
 using MtnMomo.NET;
+using Tests.Base;
 using Xunit;
 
 namespace Tests
 {
-    public class RemittancesTests : BaseTestClass
-    
+    public class RemittancesTests : BaseTests
     {
-        private const string SubscriptionKey = "d484a1f0d34f4301916d0f2c9e9106a2";
+
         private const string TokenPath = "/remittance/token/";
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Tests
                 httpTest
                     .RespondWithJson(new
                     {
-                        access_token = AccessToken,
+                        access_token = Settings.AccessToken,
                         expires_in = 3600,
                         token_type = "access_token"
                     })
@@ -44,22 +44,24 @@ namespace Tests
                         availableBalance = "20000",
                         currency = "UGX"
                     });
-                var config = new MomoConfig();
-                config.UserId = UserId;
-                config.UserSecret = UserSecretKey;
-                config.SubscriptionKeys.Remittances = SubscriptionKey;
-                
+                var config = new MomoConfig
+                {
+                    UserId = Settings.UserId,
+                    UserSecret = Settings.UserSecretKey,
+                    SubscriptionKeys = {Remittances = Settings.SubscriptionKey }
+                };
+
                 var momo = new Momo(config);
                 var remittances = momo.Remittances;
 
                 var result = await remittances.GetBalance();
 
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment("/remittance/v1_0/account/balance"))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment("/remittance/v1_0/account/balance"))
                     .WithVerb(HttpMethod.Get)
-                    .WithHeader("Authorization", $"Bearer {AccessToken}")
-                    .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey)
+                    .WithHeader("Authorization", $"Bearer {Settings.AccessToken}")
+                    .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey)
                     .WithHeader("X-Target-Environment", "sandbox");
                 
                 Assert.Equal(20000, result.AvailableBalance);
@@ -75,28 +77,30 @@ namespace Tests
                 httpTest
                     .RespondWithJson(new
                     {
-                        access_token = AccessToken,
+                        access_token = Settings.AccessToken,
                         expires_in = 3600,
                         token_type = "access_token"
                     })
-                    .RespondWithJson(new {result = true});  
-                var config = new MomoConfig();
-                config.UserId = UserId;
-                config.UserSecret = UserSecretKey;
-                config.SubscriptionKeys.Remittances = SubscriptionKey;
-                
+                    .RespondWithJson(new {result = true});
+                var config = new MomoConfig
+                {
+                    UserId = Settings.UserId,
+                    UserSecret = Settings.UserSecretKey,
+                    SubscriptionKeys = {Remittances = Settings.SubscriptionKey }
+                };
+
                 var momo = new Momo(config);
                 var remittances = momo.Remittances;
 
                 var result = await remittances.IsAccountHolderActive(new Party("0777000000", PartyIdType.Msisdn));
 
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
-                        BaseUri.AppendPathSegment($"/remittance/v1_0/accountholder/msisdn/0777000000/active"))
+                        Settings.BaseUri.AppendPathSegment($"/remittance/v1_0/accountholder/msisdn/0777000000/active"))
                     .WithVerb(HttpMethod.Get)
-                    .WithHeader("Authorization", $"Bearer {AccessToken}")
-                    .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey)
+                    .WithHeader("Authorization", $"Bearer {Settings.AccessToken}")
+                    .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey)
                     .WithHeader("X-Target-Environment", "sandbox");
                 Assert.True(result);
             }
@@ -110,7 +114,7 @@ namespace Tests
                 httpTest
                     .RespondWithJson(new
                     {
-                        access_token = AccessToken,
+                        access_token = Settings.AccessToken,
                         expires_in = 3600,
                         token_type = "access_token"
                     })
@@ -119,12 +123,12 @@ namespace Tests
                         amount= "25000",
                         currency = "UGX"
                     }, 202);
-                
-                var config = new MomoConfig();
-                config.UserId = UserId;
-                config.UserSecret = UserSecretKey;
-                config.SubscriptionKeys.Remittances = SubscriptionKey;
-                
+
+                var config = new MomoConfig
+                {
+                    UserId = Settings.UserId, UserSecret = Settings.UserSecretKey, SubscriptionKeys = {Remittances = Settings.SubscriptionKey }
+                };
+
                 var momo = new Momo(config);
                 var remittances = momo.Remittances;
 
@@ -138,15 +142,15 @@ namespace Tests
                     new Uri("http://www.example.com")
                 );
 
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
-                        BaseUri.AppendPathSegment("/remittance/v1_0/transfer"))
+                        Settings.BaseUri.AppendPathSegment("/remittance/v1_0/transfer"))
                     .WithVerb(HttpMethod.Post)
-                    .WithHeader("Authorization", $"Bearer {AccessToken}")
+                    .WithHeader("Authorization", $"Bearer {Settings.AccessToken}")
                     .WithHeader("X-Reference-Id", result.ToString())
                     .WithHeader("X-Target-Environment", "sandbox")
-                    .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey)
+                    .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey)
                     .WithRequestJson(new
                     {
                         amount = "25000.00",
@@ -172,7 +176,7 @@ namespace Tests
                 httpTest
                     .RespondWithJson(new
                     {
-                        access_token = AccessToken,
+                        access_token = Settings.AccessToken,
                         expires_in = 3600,
                         token_type = "access_token"
                     })
@@ -189,10 +193,12 @@ namespace Tests
                         }
                     });
 
-                var config = new MomoConfig();
-                config.UserId = UserId;
-                config.UserSecret = UserSecretKey;
-                config.SubscriptionKeys.Remittances = SubscriptionKey;
+                var config = new MomoConfig
+                {
+                    UserId = Settings.UserId,
+                    UserSecret = Settings.UserSecretKey,
+                    SubscriptionKeys = {Remittances = Settings.SubscriptionKey}
+                };
 
                 var momo = new Momo(config);
                 var remittances = momo.Remittances;
@@ -201,14 +207,14 @@ namespace Tests
                 
                 var result = await remittances.GetRemittance(guid);
 
-                httpTest.ShouldHaveCalled(BaseUri.AppendPathSegment(TokenPath))
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
                 httpTest.ShouldHaveCalled(
-                        BaseUri.AppendPathSegment("/remittance/v1_0/transfer").AppendPathSegment(guid))
+                        Settings.BaseUri.AppendPathSegment("/remittance/v1_0/transfer").AppendPathSegment(guid))
                     .WithVerb(HttpMethod.Get)
-                    .WithHeader("Authorization", $"Bearer {AccessToken}")
+                    .WithHeader("Authorization", $"Bearer {Settings.AccessToken}")
                     .WithHeader("X-Target-Environment", "sandbox")
-                    .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey);
+                    .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey);
                 
                 Assert.Equal(25000M, result.Amount);
                 Assert.Equal("UGX", result.Currency);

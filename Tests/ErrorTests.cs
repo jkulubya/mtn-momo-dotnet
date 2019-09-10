@@ -3,15 +3,16 @@ using System.Threading.Tasks;
 using Flurl.Http.Testing;
 using MtnMomo.NET;
 using MtnMomo.NET.Exceptions;
+using Tests.Base;
 using Xunit;
 
 namespace Tests
 {
-    public class ErrorTests : BaseTestClass
+    public class ErrorTests : BaseTests
     {
-        private const string SubscriptionKey = "d484a1f0d34f4301916d0f2c9e9106a2";
         private const string TokenPath = "/collection/token/";
-        
+
+
         [Fact]
         public async Task NetworkErrorIsThrownWhenInvalidResponseIsReceived()
         {
@@ -20,7 +21,7 @@ namespace Tests
                 httpTest
                     .RespondWithJson(new
                     {
-                        access_token = AccessToken,
+                        access_token = Settings.AccessToken,
                         expires_in = 3600,
                         token_type = "access_token"
                     })
@@ -36,10 +37,13 @@ namespace Tests
                             partyId = "0777000000"
                         }
                     });
-                var config = new MomoConfig();
-                config.UserId = UserId;
-                config.UserSecret = UserSecretKey;
-                config.SubscriptionKeys.Collections = SubscriptionKey;
+
+                var config = new MomoConfig
+                {
+                    UserId = Settings.UserId,
+                    UserSecret = Settings.UserSecretKey,
+                    SubscriptionKeys = {Collections = Settings.SubscriptionKey}
+                };
 
                 var momo = new Momo(config);
                 var collections = momo.Collections;

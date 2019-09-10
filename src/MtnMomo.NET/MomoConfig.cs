@@ -34,11 +34,4 @@ namespace MtnMomo.NET
 
         public MomoEnvironment Environment { get; set; } = MomoEnvironment.Sandbox;
     }
-
-    public class SubscriptionKeys
-    {
-        public string Collections { get; set; }
-        public string Disbursements { get; set; }
-        public string Remittances { get; set; }
-    }
 }

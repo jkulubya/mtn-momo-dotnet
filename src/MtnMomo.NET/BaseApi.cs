@@ -15,8 +15,8 @@ namespace MtnMomo.NET
         private readonly MomoConfig _config;
         protected readonly FlurlClient Client;
         private AccessToken Token { get; set; }
-        protected abstract string _tokenPath { get; }
-        protected abstract string _subscriptionKey { get; }
+        protected abstract string TokenPath { get; }
+        protected abstract string SubscriptionKey { get; }
         
         internal BaseApi(HttpClientFactory clientFactory, MomoConfig config)
         {
@@ -36,7 +36,7 @@ namespace MtnMomo.NET
         
         private async Task<AccessToken> RefreshAccessToken()
         {
-            var response = await _config.BaseUri.AppendPathSegment(_tokenPath)
+            var response = await _config.BaseUri.AppendPathSegment(TokenPath)
                 .WithHeader("Authorization", $"Basic {_config.ClientAuthToken}")
                 .PostJsonAsync("")
                 .ReceiveJson<GetAccessTokenResponse>();
@@ -53,7 +53,7 @@ namespace MtnMomo.NET
         private async Task BeforeCallAsync(HttpCall httpCall)
         {
             httpCall.Request.Headers
-                .Add("Ocp-Apim-Subscription-Key", _subscriptionKey);
+                .Add("Ocp-Apim-Subscription-Key", SubscriptionKey);
                         
             if (Token == null || DateTimeOffset.UtcNow >= Token.Expires)
             {
