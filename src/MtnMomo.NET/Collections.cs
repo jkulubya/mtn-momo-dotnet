@@ -25,10 +25,8 @@ namespace MtnMomo.NET
             Party payer,
             string payerMessage,
             string payeeNote,
-            Uri callbackUrl
-            )
+            Uri callbackUrl = null)
         {
-            
             // TODO validate inputs
             var referenceId = Guid.NewGuid();
             var transaction = new
@@ -39,13 +37,17 @@ namespace MtnMomo.NET
                 Payer = payer,
                 PayerMessage = payerMessage,
                 PayeeNote = payeeNote,
-                CallbackUrl = callbackUrl.ToString()
             };
 
-            await Client.Request("/collection/v1_0/requesttopay")
-                .WithHeader("X-Callback-Url", callbackUrl)
-                .WithHeader("X-Reference-Id", referenceId)
-                .PostJsonAsync(transaction);
+            var request = Client.Request("/collection/v1_0/requesttopay")
+                .WithHeader("X-Reference-Id", referenceId);
+
+            if(callbackUrl != null)
+            {
+                request.WithHeader("X-Callback-Url", callbackUrl);
+            }
+
+            await request.PostJsonAsync(transaction);
 
             return referenceId;
         }

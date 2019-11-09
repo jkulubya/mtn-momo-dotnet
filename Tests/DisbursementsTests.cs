@@ -118,11 +118,8 @@ namespace Tests
                         expires_in = 3600,
                         token_type = "access_token"
                     })
-                    .RespondWithJson(new
-                    {
-                        amount= "25000",
-                        currency = "UGX"
-                    }, 202);
+                    .RespondWith(status: 202)
+                    .RespondWith(status: 202);
 
                 var config = new MomoConfig
                 {
@@ -134,7 +131,7 @@ namespace Tests
                 var momo = new Momo(config);
                 var disbursements = momo.Disbursements;
 
-                var result = await disbursements.Transfer(
+                var resultWithCallback = await disbursements.Transfer(
                     25000.00M,
                     "UGX",
                     "XX",
@@ -143,6 +140,15 @@ namespace Tests
                     "ZZ",
                     new Uri("http://www.example.com")
                 );
+                
+                var resultWithoutCallback = await disbursements.Transfer(
+                    125000.00M,
+                    "UGX",
+                    "XY",
+                    new Party("0777000000", PartyIdType.Msisdn),
+                    "YDY",
+                    "ZZM"
+                );
 
                 httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);
@@ -150,8 +156,9 @@ namespace Tests
                         Settings.BaseUri.AppendPathSegment("/disbursement/v1_0/transfer"))
                     .WithVerb(HttpMethod.Post)
                     .WithHeader("Authorization", $"Bearer {Settings.AccessToken}")
-                    .WithHeader("X-Reference-Id", result.ToString())
+                    .WithHeader("X-Reference-Id", resultWithCallback.ToString())
                     .WithHeader("X-Target-Environment", "sandbox")
+                    .WithHeader("X-Callback-Url", "http://www.example.com")
                     .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey)
                     .WithRequestJson(new
                     {
@@ -165,7 +172,27 @@ namespace Tests
                         },
                         payerMessage = "YY",
                         payeeNote = "ZZ",
-                        callbackUrl = "http://www.example.com/"
+                    });
+                httpTest.ShouldHaveCalled(
+                        Settings.BaseUri.AppendPathSegment("/disbursement/v1_0/transfer"))
+                    .WithVerb(HttpMethod.Post)
+                    .WithHeader("Authorization", $"Bearer {Settings.AccessToken}")
+                    .WithHeader("X-Reference-Id", resultWithoutCallback.ToString())
+                    .WithHeader("X-Target-Environment", "sandbox")
+                    .WithoutHeader("X-Callback-Url")
+                    .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey)
+                    .WithRequestJson(new
+                    {
+                        amount = "125000.00",
+                        currency = "UGX",
+                        externalId = "XY",
+                        payee = new
+                        {
+                            partyIdType = "MSISDN",
+                            partyId = "0777000000"
+                        },
+                        payerMessage = "YDY",
+                        payeeNote = "ZZM",
                     });
             }
         }

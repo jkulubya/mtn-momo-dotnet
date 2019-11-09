@@ -5,7 +5,7 @@ namespace MtnMomo.NET
 {
     public class MomoConfig
     {
-        private string _baseUri = new Uri("https://ericssonbasicapi2.azure-api.net").ToString();
+        private string _baseUri = new Uri("https://sandbox.momodeveloper.mtn.com").ToString();
 
         public string BaseUri
         {
