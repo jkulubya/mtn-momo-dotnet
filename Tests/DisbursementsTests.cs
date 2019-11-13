@@ -15,10 +15,9 @@ namespace Tests
         [Fact]
         public void ThrowsOnInvalidConfig()
         {
-            var momo = new Momo(new MomoConfig());
             var result = Record.Exception(() =>
             {
-                var disbursements = momo.Disbursements;
+                var _ = new DisbursementsClient(new MomoConfig());
             });
 
             Assert.NotNull(result);
@@ -46,11 +45,10 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Disbursements = Settings.SubscriptionKey }
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var disbursements = momo.Disbursements;
+                var disbursements = new DisbursementsClient(config);
 
                 var result = await disbursements.GetBalance();
 
@@ -84,12 +82,11 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Disbursements = Settings.SubscriptionKey},
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
 
-                var momo = new Momo(config);
-                var disbursements = momo.Disbursements;
+                var disbursements = new DisbursementsClient(config);
 
                 var result = await disbursements.IsAccountHolderActive(new Party("0777000000", PartyIdType.Msisdn));
 
@@ -125,11 +122,10 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Disbursements = Settings.SubscriptionKey}
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var disbursements = momo.Disbursements;
+                var disbursements = new DisbursementsClient(config);
 
                 var resultWithCallback = await disbursements.Transfer(
                     25000.00M,
@@ -226,11 +222,10 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Disbursements = Settings.SubscriptionKey }
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var disbursements = momo.Disbursements;
+                var disbursements = new DisbursementsClient(config);
 
                 var guid = Guid.NewGuid();
                 

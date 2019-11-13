@@ -6,43 +6,40 @@ using MtnMomo.NET.ApiResponses;
 
 namespace MtnMomo.NET
 {
-    public class Collections : BaseApi
+    public class RemittancesClient : BaseApi
     {
-        protected override string TokenPath { get; } = "/collection/token/";
+        protected override string TokenPath { get; } = "/remittance/token/";
         protected override string SubscriptionKey { get; }
 
-        internal Collections(HttpClientFactory clientFactory, MomoConfig config) : base(clientFactory, config)
+        public RemittancesClient(MomoConfig config) : base(config)
         {
-            var key = config?.SubscriptionKeys?.Collections;
-            if(string.IsNullOrWhiteSpace(key)) throw new ArgumentException("The collections subscription key cannot be null");
-            SubscriptionKey = key;
+            SubscriptionKey = config.SubscriptionKey;
         }
         
-        public async Task<Guid> RequestToPay(
+        public async Task<Guid> Transfer(
             decimal amount,
             string currency,
             string externalId,
-            Party payer,
+            Party recipient,
             string payerMessage,
             string payeeNote,
             Uri callbackUrl = null)
         {
-            // TODO validate inputs
             var referenceId = Guid.NewGuid();
             var transaction = new
             {
                 Amount = amount.ToString(CultureInfo.InvariantCulture),
                 Currency = currency,
                 ExternalId = externalId,
-                Payer = payer,
+                Payee = recipient,
                 PayerMessage = payerMessage,
                 PayeeNote = payeeNote,
             };
 
-            var request = Client.Request("/collection/v1_0/requesttopay")
+            var request = Client.Request("/remittance/v1_0/transfer")
                 .WithHeader("X-Reference-Id", referenceId);
 
-            if(callbackUrl != null)
+            if (callbackUrl != null)
             {
                 request.WithHeader("X-Callback-Url", callbackUrl);
             }
@@ -52,16 +49,16 @@ namespace MtnMomo.NET
             return referenceId;
         }
 
-        public async Task<Collection> GetTransaction(Guid referenceId)
+        public async Task<Remittance> GetRemittance(Guid referenceId)
         {
-            return await Client.Request($"/collection/v1_0/requesttopay/{referenceId}")
-                .GetJsonAsync<Collection>();
+            return await Client.Request($"/remittance/v1_0/transfer/{referenceId}")
+                .GetJsonAsync<Remittance>();
         }
 
         public async Task<AccountBalance> GetBalance()
         {
             var response = await Client
-                .Request("/collection/v1_0/account/balance")
+                .Request("/remittance/v1_0/account/balance")
                 .GetJsonAsync<AccountBalanceResponse>();
 
             return new AccountBalance
@@ -75,7 +72,7 @@ namespace MtnMomo.NET
         {
             var response = await Client
                 .Request(
-                    $"/collection/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
+                    $"/remittance/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
                 .GetJsonAsync<PayerActiveResponse>();
             
             return response.Result;

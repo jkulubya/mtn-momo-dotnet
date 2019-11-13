@@ -42,11 +42,10 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Collections = Settings.SubscriptionKey}
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var collections = momo.Collections;
+                var collections = new CollectionsClient(config);
 
                 var guid = Guid.NewGuid();
 

@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http.Testing;
@@ -52,19 +53,21 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Collections = Settings.SubscriptionKey }
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var collections = momo.Collections;
+                var collections = new CollectionsClient(config);
 
                 var guid1 = Guid.NewGuid();
                 var guid2 = Guid.NewGuid();
 
                 var result1 = await collections.GetTransaction(guid1);
                 var result2 = await collections.GetTransaction(guid2);
-                
-                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath));
+
+                httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
+                    .WithHeader("Authorization",
+                        Convert.ToBase64String(Encoding.UTF8.GetBytes($"{config.UserId}:{config.UserSecret}")))
+                    .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey);
                 httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment("/collection/v1_0/requesttopay").AppendPathSegment(guid1))
                     .WithHeader("Authorization", $"Bearer {Settings.AccessToken}")
                     .WithHeader("Ocp-Apim-Subscription-Key", Settings.SubscriptionKey)

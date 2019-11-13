@@ -15,10 +15,9 @@ namespace Tests
         [Fact]
         public void ThrowsOnInvalidConfig()
         {
-            var momo = new Momo(new MomoConfig());
             var result = Record.Exception(() =>
             {
-                var collections = momo.Collections;
+                var _ = new CollectionsClient(new MomoConfig());
             });
 
             Assert.NotNull(result);
@@ -46,11 +45,10 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Collections = Settings.SubscriptionKey}
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var collections = momo.Collections;
+                var collections = new CollectionsClient(config);
 
                 var result = await collections.GetBalance();
 
@@ -84,11 +82,10 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Collections = Settings.SubscriptionKey}
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var collections = momo.Collections;
+                var collections = new CollectionsClient(config);
 
                 var result = await collections.IsAccountHolderActive(new Party("0777000000", PartyIdType.Msisdn));
 
@@ -118,14 +115,15 @@ namespace Tests
                     })
                     .RespondWith(status: 202)
                     .RespondWith(status: 202);
-                
-                var config = new MomoConfig();
-                config.UserId = Settings.UserId;
-                config.UserSecret = Settings.UserSecretKey;
-                config.SubscriptionKeys.Collections = Settings.SubscriptionKey;
-                
-                var momo  =  new Momo(config);
-                var collections = momo.Collections;
+
+                var config = new MomoConfig
+                {
+                    UserId = Settings.UserId,
+                    UserSecret = Settings.UserSecretKey,
+                    SubscriptionKey = Settings.SubscriptionKey
+                };
+
+                var collections = new CollectionsClient(config);
 
                 var resultWithCallback = await collections.RequestToPay(
                     25000.00M,
@@ -222,11 +220,10 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Collections = Settings.SubscriptionKey}
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var collections = momo.Collections;
+                var collections = new CollectionsClient(config);
 
                 var guid = Guid.NewGuid();
                 
