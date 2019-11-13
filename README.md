@@ -29,10 +29,9 @@ using MtnMomo.NET;
 var config = new MomoConfig();
 config.UserId = UserId;
 config.UserSecret = UserSecretKey;
-config.SubscriptionKeys.Collections = SubscriptionKey;
+config.SubscriptionKey = SubscriptionKey;
 
-var momo  =  new Momo(config);
-var collections = momo.Collections;
+var collections = new CollectionsClient(config);
 
 var result = await collections.RequestToPay(
     25000.00M,
@@ -40,7 +39,7 @@ var result = await collections.RequestToPay(
     "External ID",
     new Party("0777000000", PartyIdType.Msisdn),
     "Payer message",
-    "Payer note",
+    "Payee note",
     new Uri("http://www.example.com")
 );
 ```
@@ -54,10 +53,9 @@ using MtnMomo.NET;
 var config = new MomoConfig();
 config.UserId = UserId;
 config.UserSecret = UserSecretKey;
-config.SubscriptionKeys.Disbursements = SubscriptionKey;
+config.SubscriptionKey = SubscriptionKey;
 
-var momo = new Momo(config);
-var disbursements = momo.Disbursements;
+var disbursements = new DisbursementsClient(config);
 
 var result = await disbursements.Transfer(
     25000.00M,
@@ -79,10 +77,9 @@ using MtnMomo.NET;
 var config = new MomoConfig();
 config.UserId = UserId;
 config.UserSecret = UserSecretKey;
-config.SubscriptionKeys.Remittances = SubscriptionKey;
+config.SubscriptionKey = SubscriptionKey;
 
-var momo = new Momo(config);
-var remittances = momo.Remittances;
+var remittances = new RemittancesClient(config);
 
 var result = await remittances.Transfer(
     25000.00M,
