@@ -18,10 +18,11 @@ namespace MtnMomo.NET
         protected abstract string TokenPath { get; }
         protected abstract string SubscriptionKey { get; }
         
-        internal BaseApi(HttpClientFactory clientFactory, MomoConfig config)
+        internal BaseApi(MomoConfig config)
         {
+            ValidateConfig(config);
             _config = config;
-            Client = clientFactory.GetClient();
+            Client = new HttpClientFactory(_config).GetClient();
 
             Client.Configure(settings =>
             {
@@ -36,8 +37,9 @@ namespace MtnMomo.NET
         
         private async Task<AccessToken> RefreshAccessToken()
         {
-            var response = await _config.BaseUri.AppendPathSegment(TokenPath)
+            var response =  await _config.BaseUri.AppendPathSegment(TokenPath)
                 .WithHeader("Authorization", $"Basic {_config.ClientAuthToken}")
+                .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey)
                 .PostJsonAsync("")
                 .ReceiveJson<GetAccessTokenResponse>();
 
@@ -90,10 +92,24 @@ namespace MtnMomo.NET
                     throw new NetworkException(e);
                 }
                 
+                Console.WriteLine(response);
+                
                 throw new MomoException(response.Code, response.Message);
             }
 
             throw new NetworkException(exception);
+        }
+
+        private void ValidateConfig(MomoConfig config)
+        {
+            if (string.IsNullOrEmpty(config.SubscriptionKey))
+                throw new ArgumentException("The subscription key cannot be null");
+            
+            if (string.IsNullOrEmpty(config.UserId))
+                throw new ArgumentException("The user id cannot be null");
+            
+            if (string.IsNullOrEmpty(config.UserSecret))
+                throw new ArgumentException("The user secret cannot be null");
         }
     }
 }

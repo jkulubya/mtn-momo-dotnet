@@ -6,16 +6,14 @@ using MtnMomo.NET.ApiResponses;
 
 namespace MtnMomo.NET
 {
-    public class Remittances : BaseApi
+    public class DisbursementsClient : BaseApi
     {
-        protected override string TokenPath { get; } = "/remittance/token/";
+        protected override string TokenPath { get; } = "/disbursement/token/";
         protected override string SubscriptionKey { get; }
 
-        internal Remittances(HttpClientFactory clientFactory, MomoConfig config) : base(clientFactory, config)
+        public DisbursementsClient(MomoConfig config) : base(config)
         {
-            var key = config?.SubscriptionKeys?.Remittances;
-            if(string.IsNullOrWhiteSpace(key)) throw new ArgumentException("The remittances subscription key cannot be null");
-            SubscriptionKey = key;
+            SubscriptionKey = config.SubscriptionKey;
         }
         
         public async Task<Guid> Transfer(
@@ -38,10 +36,10 @@ namespace MtnMomo.NET
                 PayeeNote = payeeNote,
             };
 
-            var request = Client.Request("/remittance/v1_0/transfer")
+            var request = Client.Request("/disbursement/v1_0/transfer")
                 .WithHeader("X-Reference-Id", referenceId);
 
-            if (callbackUrl != null)
+            if(callbackUrl != null)
             {
                 request.WithHeader("X-Callback-Url", callbackUrl);
             }
@@ -51,16 +49,16 @@ namespace MtnMomo.NET
             return referenceId;
         }
 
-        public async Task<Remittance> GetRemittance(Guid referenceId)
+        public async Task<Disbursement> GetDisbursement(Guid referenceId)
         {
-            return await Client.Request($"/remittance/v1_0/transfer/{referenceId}")
-                .GetJsonAsync<Remittance>();
+            return await Client.Request($"/disbursement/v1_0/transfer/{referenceId}")
+                .GetJsonAsync<Disbursement>();
         }
 
         public async Task<AccountBalance> GetBalance()
         {
             var response = await Client
-                .Request("/remittance/v1_0/account/balance")
+                .Request("/disbursement/v1_0/account/balance")
                 .GetJsonAsync<AccountBalanceResponse>();
 
             return new AccountBalance
@@ -74,7 +72,7 @@ namespace MtnMomo.NET
         {
             var response = await Client
                 .Request(
-                    $"/remittance/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
+                    $"/disbursement/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
                 .GetJsonAsync<PayerActiveResponse>();
             
             return response.Result;

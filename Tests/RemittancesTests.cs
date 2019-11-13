@@ -17,10 +17,9 @@ namespace Tests
         [Fact]
         public void ThrowsOnInvalidConfig()
         {
-            var momo = new Momo(new MomoConfig());
             var result = Record.Exception(() =>
             {
-                var remittances = momo.Remittances;
+                var _ = new RemittancesClient(new MomoConfig());
             });
 
             Assert.NotNull(result);
@@ -48,11 +47,10 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Remittances = Settings.SubscriptionKey }
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var remittances = momo.Remittances;
+                var remittances = new RemittancesClient(config);
 
                 var result = await remittances.GetBalance();
 
@@ -86,11 +84,10 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Remittances = Settings.SubscriptionKey }
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var remittances = momo.Remittances;
+                var remittances = new RemittancesClient(config);
 
                 var result = await remittances.IsAccountHolderActive(new Party("0777000000", PartyIdType.Msisdn));
 
@@ -123,11 +120,10 @@ namespace Tests
                 
                 var config = new MomoConfig
                 {
-                    UserId = Settings.UserId, UserSecret = Settings.UserSecretKey, SubscriptionKeys = {Remittances = Settings.SubscriptionKey }
+                    UserId = Settings.UserId, UserSecret = Settings.UserSecretKey, SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var remittances = momo.Remittances;
+                var remittances = new RemittancesClient(config);
 
                 var resultWithCallback = await remittances.Transfer(
                     25000.00M,
@@ -224,11 +220,10 @@ namespace Tests
                 {
                     UserId = Settings.UserId,
                     UserSecret = Settings.UserSecretKey,
-                    SubscriptionKeys = {Remittances = Settings.SubscriptionKey}
+                    SubscriptionKey = Settings.SubscriptionKey
                 };
 
-                var momo = new Momo(config);
-                var remittances = momo.Remittances;
+                var remittances = new RemittancesClient(config);
 
                 var guid = Guid.NewGuid();
                 

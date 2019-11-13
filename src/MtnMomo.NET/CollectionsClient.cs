@@ -6,39 +6,38 @@ using MtnMomo.NET.ApiResponses;
 
 namespace MtnMomo.NET
 {
-    public class Disbursements : BaseApi
+    public class CollectionsClient : BaseApi
     {
-        protected override string TokenPath { get; } = "/disbursement/token/";
+        protected override string TokenPath { get; } = "/collection/token/";
         protected override string SubscriptionKey { get; }
 
-        internal Disbursements(HttpClientFactory clientFactory, MomoConfig config) : base(clientFactory, config)
+        public CollectionsClient(MomoConfig config) : base(config)
         {
-            var key = config?.SubscriptionKeys?.Disbursements;
-            if(string.IsNullOrWhiteSpace(key)) throw new ArgumentException("The disbursements subscription key cannot be null");
-            SubscriptionKey = key;
+            SubscriptionKey = config.SubscriptionKey;
         }
         
-        public async Task<Guid> Transfer(
+        public async Task<Guid> RequestToPay(
             decimal amount,
             string currency,
             string externalId,
-            Party recipient,
+            Party payer,
             string payerMessage,
             string payeeNote,
             Uri callbackUrl = null)
         {
+            // TODO validate inputs
             var referenceId = Guid.NewGuid();
             var transaction = new
             {
                 Amount = amount.ToString(CultureInfo.InvariantCulture),
                 Currency = currency,
                 ExternalId = externalId,
-                Payee = recipient,
+                Payer = payer,
                 PayerMessage = payerMessage,
                 PayeeNote = payeeNote,
             };
 
-            var request = Client.Request("/disbursement/v1_0/transfer")
+            var request = Client.Request("/collection/v1_0/requesttopay")
                 .WithHeader("X-Reference-Id", referenceId);
 
             if(callbackUrl != null)
@@ -51,16 +50,16 @@ namespace MtnMomo.NET
             return referenceId;
         }
 
-        public async Task<Disbursement> GetDisbursement(Guid referenceId)
+        public async Task<Collection> GetTransaction(Guid referenceId)
         {
-            return await Client.Request($"/disbursement/v1_0/transfer/{referenceId}")
-                .GetJsonAsync<Disbursement>();
+            return await Client.Request($"/collection/v1_0/requesttopay/{referenceId}")
+                .GetJsonAsync<Collection>();
         }
 
         public async Task<AccountBalance> GetBalance()
         {
             var response = await Client
-                .Request("/disbursement/v1_0/account/balance")
+                .Request("/collection/v1_0/account/balance")
                 .GetJsonAsync<AccountBalanceResponse>();
 
             return new AccountBalance
@@ -74,7 +73,7 @@ namespace MtnMomo.NET
         {
             var response = await Client
                 .Request(
-                    $"/disbursement/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
+                    $"/collection/v1_0/accountholder/{party.PartyIdType.ToString().ToLowerInvariant()}/{party.PartyId}/active")
                 .GetJsonAsync<PayerActiveResponse>();
             
             return response.Result;

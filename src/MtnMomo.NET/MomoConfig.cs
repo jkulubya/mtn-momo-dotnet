@@ -19,7 +19,7 @@ namespace MtnMomo.NET
 
         public string UserId { get; set; }
         public string UserSecret { get; set; }
-        public SubscriptionKeys SubscriptionKeys { get; set; } = new SubscriptionKeys();
+        public string SubscriptionKey { get; set; }
 
         internal string ClientAuthToken
         {
