@@ -37,7 +37,7 @@ namespace MtnMomo.NET
         
         private async Task<AccessToken> RefreshAccessToken()
         {
-            var response =  await _config.BaseUri.AppendPathSegment(TokenPath)
+            var response = await _config.BaseUri.AppendPathSegment(TokenPath)
                 .WithHeader("Authorization", $"Basic {_config.ClientAuthToken}")
                 .WithHeader("Ocp-Apim-Subscription-Key", SubscriptionKey)
                 .PostJsonAsync("")
@@ -91,8 +91,6 @@ namespace MtnMomo.NET
                 {
                     throw new NetworkException(e);
                 }
-                
-                Console.WriteLine(response);
                 
                 throw new MomoException(response.Code, response.Message);
             }

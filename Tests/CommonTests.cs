@@ -61,8 +61,8 @@ namespace Tests
                 var guid1 = Guid.NewGuid();
                 var guid2 = Guid.NewGuid();
 
-                var result1 = await collections.GetTransaction(guid1);
-                var result2 = await collections.GetTransaction(guid2);
+                var result1 = await collections.GetCollection(guid1);
+                var result2 = await collections.GetCollection(guid2);
 
                 httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithHeader("Authorization",

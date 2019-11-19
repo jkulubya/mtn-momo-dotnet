@@ -50,7 +50,7 @@ namespace MtnMomo.NET
             return referenceId;
         }
 
-        public async Task<Collection> GetTransaction(Guid referenceId)
+        public async Task<Collection> GetCollection(Guid referenceId)
         {
             return await Client.Request($"/collection/v1_0/requesttopay/{referenceId}")
                 .GetJsonAsync<Collection>();
