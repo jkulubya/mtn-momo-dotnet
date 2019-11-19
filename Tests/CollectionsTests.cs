@@ -227,7 +227,7 @@ namespace Tests
 
                 var guid = Guid.NewGuid();
                 
-                var result = await collections.GetTransaction(guid);
+                var result = await collections.GetCollection(guid);
                 
                 httpTest.ShouldHaveCalled(Settings.BaseUri.AppendPathSegment(TokenPath))
                     .WithVerb(HttpMethod.Post);

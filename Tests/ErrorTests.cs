@@ -51,7 +51,7 @@ namespace Tests
 
                 var result = await Record.ExceptionAsync(async () =>
                 {
-                    await collections.GetTransaction(guid);
+                    await collections.GetCollection(guid);
                 });
                 
                 Assert.NotNull(result);
