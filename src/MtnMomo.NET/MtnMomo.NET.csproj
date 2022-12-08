@@ -19,7 +19,7 @@
 
     <ItemGroup>
       <PackageReference Include="flurl.http" Version="2.4.1" />
-      <PackageReference Include="newtonsoft.json" Version="12.0.1" />
+      <PackageReference Include="newtonsoft.json" Version="13.0.2" />
     </ItemGroup>
 
 </Project>
